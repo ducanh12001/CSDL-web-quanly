@@ -224,55 +224,6 @@
     color: #fff;
     padding: 5px;
 }
-/*login*/
-#login
-{
-    background-color: #dddddd;
-    min-height: 300px;
-    padding: 7.5px 15px;
-    align-items: center;
-    text-align: center;
-}
-#login login-form{
-    width: 100%;
-    max-width: 300px;
-    margin: 20px auto;
-    background-color: #ffffff;
-    padding: 15px;
-    border: 2px dotted #cccccc;
-    border-radius: 10px;
-}
-.login-form h2{
-    color: #009999;
-    font-size: 20px;
-    margin-bottom: 30px;
-}
-.input-box{
-    margin-bottom: 20px;
-}
-.input-box input{
-    padding: 7.5px 3px;
-    width: 30%;
-    border: 1px solid #cccccc;
-    outline: none;
-}
-.btn-box{
-    text-align: center;
-    margin-top: 30px;
-}
-.btn-box button{
-    padding: 7.5px 15px;
-    border-radius: 10px;
-    background-color: #009999;
-    color: #ffffff;
-    border: none;
-    outline: none;
-}
-.btn-box button:hover
-{
-    background: rgb(24, 58, 53);
-    cursor: pointer;
-}
 
 /*table*/
 #search table
@@ -297,4 +248,18 @@
 {
     color: white;
     background-color: rgba(0, 0, 0, 0.384);
+}
+
+/*profile*/
+#profile
+{
+    background-color: rgb(213, 222, 224);
+}
+.sidebar
+{
+    background-color: rgb(201, 124, 124);
+    color: black;
+    height: 250px;
+    width: 250px;
+    margin-left: 100px;
 }

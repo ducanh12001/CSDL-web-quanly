@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Login</title>
-    <link rel="stylesheet" type = "text/css" href="css/style.css">
+    <link rel="stylesheet" type = "text/css" href="css/login.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href= "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
@@ -31,27 +31,21 @@
 <section id="login">
 <div class="container">
   <div class="login-form">
-    <form action="" method="post">
+    <form>
       <h2>Login to website</h2>
-      <div class="input-box">
-        <i ></i>
-        <input type="text" placeholder="Username">
+      <div class="form-group">
+        <input type="text" class="form-control" id="loginpage" placeholder="Username">
       </div>
-      <div class="input-box">
-        <i ></i>
-        <input type="password" placeholder="Password">
+      <div class="form-group">
+        <input type="password" class="form-control" id="loginpage" placeholder="Password">
       </div>
-      <div class="btn-box">
-        <button type="submit">Login</button>
+      <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="Check">
+        <label class="form-check-label" for="Check">Remember</label>
       </div>
+      <button type="submit" class="btn btn-primary">Login</button>
     </form>
   </div>
-</div>
-</section>
-<!--footer-->
-<section id="footer">
-<div class="container">
-<p> Created in 04/2021 by Duc Anh and Lam</p>
 </div>
 </section>
 </body>
