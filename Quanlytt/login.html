@@ -32,6 +32,7 @@
 <div class="container">
   <div class="login-form">
     <form>
+      {%csrf_token %}
       <h2>Login to website</h2>
       <div class="form-group">
         <input type="text" class="form-control" id="loginpage" placeholder="Username">

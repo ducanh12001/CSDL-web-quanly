@@ -38,11 +38,11 @@
                 Tài khoản
             </button>
             <div class="dropdown-menu" aria-labelledby="ProfileMenuButton">
-              <a class="dropdown-item" href="profile.html">Profile</a>
+              <a class="dropdown-item" href="manage.html">Management</a>
               <a class="dropdown-item" href="home.html">Log out</a>
             </div>
           </div>
-      </li>
+        </li>
       </ul>
     </div>
 </nav>
@@ -115,7 +115,7 @@
               </div>
               <div class="name">
                 <strong>Duc Anh</strong>
-                <span>gmail</span>
+                <span>class A</span>
               </div>
             </div>
             <div class="reviews">
@@ -139,8 +139,8 @@
               <img src="images/anhnen1.jpg">
             </div>
             <div class="name">
-              <strong>Duc Anh</strong>
-              <span>gmail</span>
+              <strong>Lam</strong>
+              <span>class B</span>
             </div>
           </div>
           <div class="reviews">
@@ -165,6 +165,7 @@
 <div class="row">
   <div class="col-md-6">
       <form class="contact-form">
+        {%csrf_token %}
         <div class="form-group">
         <input name="ctName" type="text" class="form-control" placeholder="Your Name">
         </div>
