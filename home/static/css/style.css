@@ -230,6 +230,15 @@
 }
 
 /*table*/
+.search-input
+{
+    margin-left: 800px;
+    margin-bottom: 10px;
+}
+.search-input input
+{
+    width: 6.5cm;
+}
 #search table
 {
     border-collapse: collapse;
