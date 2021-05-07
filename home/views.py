@@ -29,10 +29,7 @@ class ManagePage(View):
 
 class AddStudentPage(View):
     def get(self, request):
-        if request.user.is_authenticated:
-            return render(request, 'addStudent.html')
-        else:
-            return render(request, 'login.html')
+        return render(request, 'addStudent.html')
 
 
 class LoginUser(View):
@@ -45,10 +42,10 @@ class LoginUser(View):
         this_user = authenticate(username=user, password=user_pass)
 
         if this_user is not None:
+            login(request, this_user)
             return render(request, 'home_log.html')
         else:
             # login_unsuccessful = 1;
-            login(request, this_user)
             return render(request, 'login.html')
 
 
