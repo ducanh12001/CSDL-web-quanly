@@ -33,9 +33,9 @@
             SEARCH
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="searchClass.html">Class</a>
-              <a class="dropdown-item" href="searchStudent.html">Student</a>
-              <a class="dropdown-item" href="searchTeacher.html">Teacher</a>
+              <a class="dropdown-item" href="{% url 'home:searchClass' %}">Class</a>
+              <a class="dropdown-item" href="{% url 'home:searchStudent' %}">Student</a>
+              <a class="dropdown-item" href="{% url 'home:searchTeacher' %}">Teacher</a>
           </div>
         </li>
         <li class="nav-item">
@@ -48,7 +48,7 @@
             </button>
             <div class="dropdown-menu" aria-labelledby="ProfileMenuButton">
               <a class="dropdown-item" href="{% url 'home:management' %}">Management</a>
-              <a class="dropdown-item" href="{% url 'home:home_page' %}">Log out</a>
+              <a class="dropdown-item" href="{% url 'home:logout' %}">Log out</a>
             </div>
           </div>
       </li>

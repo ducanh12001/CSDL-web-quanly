@@ -12,59 +12,50 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-
-    <script>
-        function checkLoginUser()
-        {
-            if (user is None)
-                swal.fire("Wrong Username Or Password");
-        }
-    </script>
 </head>
 <body>
-<section id="nav-bar">
-<nav class="navbar navbar-expand-lg navbar-light">
-    <a class="navbar-brand" href="{% url 'home:home_page' %}"><img src="{% static 'images/logo.jpg' %}"></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'home:home_page' %}">HOME</a>
-        </li>
-      </ul>
-    </div>
-</nav>
-</section>
+    <section id="nav-bar">
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="{% url 'home:home_page' %}"><img src="{% static 'images/logo.jpg' %}"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'home:home_page' %}">HOME</a>
+            </li>
+          </ul>
+        </div>
+    </nav>
+    </section>
 <!--login-->
 <section id="login">
 <div class="container">
   <div class="login-form">
-    <form action="" method="post">
-      {% csrf_token %}
-      <h2>Login to website</h2>
-      <div class="form-group">
-        <input type="text" class="form-control" id="loginpage" placeholder="Username" name="userName">
-      </div>
-      <div class="form-group">
-        <input type="password" class="form-control" id="loginpage" placeholder="Password" name="userPassword">
-      </div>
-      <div class="form-group form-check">
-        <input type="checkbox" class="form-check-input" id="Check">
-        <label class="form-check-label" for="Check">Remember</label>
-      </div>
-      <button onclick="checkLoginUser()" type="submit" class="btn btn-primary">Login</button>
-    </form>
+        <form action="" method="post">
+            {% csrf_token %}
+            <h2>Login to website</h2>
+            <div class="form-group">
+                <input type="text" class="form-control" id="loginpage" placeholder="Username" name="userName">
+            </div>
+
+            <div class="form-group">
+                <input type="password" class="form-control" id="loginpage" placeholder="Password" name="userPassword">
+            </div>
+
+            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" id="Check">
+                <label class="form-check-label" for="Check">Remember</label>
+            </div>
+
+            {% for message in messages %}
+                <p class="label label-default" id="messages">{{message}}</p>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
   </div>
 </div>
 </section>
-<!--
-<script>
-  function alertClick(){
-    Swal.fire('Wrong username or password')
-  }
-</script>
--->
 </body>
 </html>

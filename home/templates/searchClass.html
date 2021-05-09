@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Search</title>
-    <link rel="stylesheet" type = "text/css" href="css/style.css">
+    <link rel="stylesheet" type = "text/css" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href= "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
@@ -15,7 +15,7 @@
 <body>
 <section id="nav-bar">
 <nav class="navbar navbar-expand-lg navbar-light">
-    <a class="navbar-brand" href="home.html"><img src="images/logo.jpg"></a>
+    <a class="navbar-brand" href="{% url 'home:home_page' %}"><img src="{% static 'images/logo.jpg' %}"></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -26,13 +26,13 @@
               SEARCH
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="searchClass.html">Class</a>
-                <a class="dropdown-item" href="searchStudent.html">Student</a>
-                <a class="dropdown-item" href="searchTeacher.html">Teacher</a>
+                <a class="dropdown-item" href="{% url 'home:searchClass' %}">Class</a>
+                <a class="dropdown-item" href="{% url 'home:searchStudent' %}">Student</a>
+                <a class="dropdown-item" href="{% url 'home:searchTeacher' %}">Teacher</a>
             </div>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="home.html">HOME</a>
+          <a class="nav-link" href="{% url 'home:home_page' %}">HOME</a>
         </li>
       </ul>
     </div>
@@ -41,10 +41,14 @@
 
 <section id="search">
     <div class="container">
-        <div class="search-input">
-            Search Class
-            <input type="text" name="searchClass" id="search1">
-        </div>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <div class="search-input">
+                Search Class
+                <input type="text" name="searchClass" id="search1">
+            </div>
+        </form>
+
         <table class="table table-bordered">
             <thread>
                 <tr>
@@ -58,17 +62,37 @@
                     <th>Ghi chú</th>
                 </tr>
             </thread>
+
             <tbody>
                 <tr>
                     <td><a name="stt"></a></td>
                     <td><a name="class"></a></td>
-                    <td><a name="classId"></a></td>
+                    <td><a name="classID"></a></td>
                     <td><a name="teacher"></a></td>
-                    <td><a name="siso"></a></td>
+                    <td><a name="studentNumber"></a></td>
                     <td><a name="room"></a></td>
-                    <td><a name="time"></a></td>
+                    <td><a name="schedule"></a></td>
                     <td><a name="note"></a></td>
                 </tr>
+
+                {% for data in courseData %}
+                    <tr>
+                        <td>{{stt}}</td>
+                        <td>{{data.courseName}}</td>
+                        <td>{{data.courseID}}</td>
+                        <td>{{data.manageTeacher.teacherName}}</td>
+                        <td>{{data.studentNumber}}</td>
+                        <td>{{data.studyRoom}}</td>
+                        <td>{{data.schedule}}</td>
+                        <td>
+                            {% if data.note is None %}
+                                {{Nothing}}
+                            {% else %}
+                                {{data.note}}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
