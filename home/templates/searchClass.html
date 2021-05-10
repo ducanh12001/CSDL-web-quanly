@@ -64,20 +64,9 @@
             </thread>
 
             <tbody>
-                <tr>
-                    <td><a name="stt"></a></td>
-                    <td><a name="class"></a></td>
-                    <td><a name="classID"></a></td>
-                    <td><a name="teacher"></a></td>
-                    <td><a name="studentNumber"></a></td>
-                    <td><a name="room"></a></td>
-                    <td><a name="schedule"></a></td>
-                    <td><a name="note"></a></td>
-                </tr>
-
                 {% for data in courseData %}
                     <tr>
-                        <td>{{stt}}</td>
+                        <td>{{ forloop.counter }}</td>
                         <td>{{data.courseName}}</td>
                         <td>{{data.courseID}}</td>
                         <td>{{data.manageTeacher.teacherName}}</td>
@@ -85,10 +74,10 @@
                         <td>{{data.studyRoom}}</td>
                         <td>{{data.schedule}}</td>
                         <td>
-                            {% if data.note is None %}
-                                {{Nothing}}
-                            {% else %}
+                            {% if data.note %}
                                 {{data.note}}
+                            {% else %}
+                                {{"Nothing"}}
                             {% endif %}
                         </td>
                     </tr>

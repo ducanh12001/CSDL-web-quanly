@@ -26,14 +26,23 @@ def search_page(request):
     return render(request, 'search.html')
 
 
-class ManagePage(View):
-    def get(self, request):
-        return render(request, 'manage.html')
+@login_required(login_url='home:login')
+def manage_classes(request):
+    teacher_all_courses = request.user.teachers.courselist_set.all()
 
+    if request.method == "POST":
+        chosen_course_id = request.POST['courseSelected']
 
-class AddStudentPage(View):
-    def get(self, request):
-        return render(request, 'addStudent.html')
+        if chosen_course_id == 'Select Class':
+            return render(request, 'manage.html', {'teacherAllCourses': teacher_all_courses})
+
+        chosen_course = CourseList.objects.get(courseID=chosen_course_id)
+
+        all_students = chosen_course.students_set.all().order_by("studentName")
+
+        return render(request, 'manage.html', {'teacherAllCourses': teacher_all_courses, 'allStudents': all_students})
+    else:
+        return render(request, 'manage.html', {'teacherAllCourses': teacher_all_courses})
 
 
 class LoginUser(View):
@@ -67,6 +76,12 @@ def cmp_by_course_id(element):
 class SearchClass(View):
     def get(self, request):
         course_data = CourseList.objects.all().order_by('courseID')
+
+        for c in course_data:
+            c.students_set
+            c.studentNumber = c.students_set.count()
+            c.save()
+
         return render(request, 'searchClass.html', {'courseData': course_data})
 
     def post(self, request):
@@ -82,12 +97,16 @@ class SearchClass(View):
 
         data_list.sort(key=cmp_by_course_id)
 
-        if len(data_list) > 1:
+        if len(data_list) > 0:
             new_list = [data_list[0]]
+            pos = 1
 
             for i in range(1, len(data_list)):
                 if data_list[i].courseID != data_list[i - 1].courseID:
+                    pos = pos + 1
                     new_list.append(data_list[i])
+
+        print(new_list)
 
         return render(request, "searchClass.html", {'courseData': new_list})
 
@@ -106,27 +125,34 @@ class SearchStudent(View):
         student_by_id = Students.objects.filter(studentID__icontains=user_search)
         student_by_name = Students.objects.filter(studentName__icontains=user_search)
 
-        data_list = []
 
-        for s in student_by_id:
-            data_list.append(s)
-        for s in student_by_name:
-            data_list.append(s)
-
-        data_list.sort(key=cmp_by_student_id)
-
-        if len(data_list) > 1:
-            new_list = [data_list[0]]
-
-            for i in range(1, len(data_list)):
-                if data_list[i].studentID != data_list[i - 1].studentID:
-                    new_list.append(data_list[i])
-                elif data_list[i].belongToCourse.courseID != data_list[i - 1].belongToCourse.courseID:
-                    new_list.append(data_list[i])
-
-        return render(request, "searchStudent.html", {'studentData': new_list})
+def cmp_teacher_by_id(element):
+    return element.teacherID
 
 
 class SearchTeacher(View):
     def get(self, request):
-        return render(request, 'searchTeacher.html')
+        teacher_data = Teachers.objects.all().order_by("teacherName")
+        return render(request, 'searchTeacher.html', {'teacherData': teacher_data})
+
+    def post(self, request):
+        user_search = request.POST['searchTeacher']
+        teacher_by_id = Teachers.objects.filter(teacherID__icontains=user_search)
+        teacher_by_name = Teachers.objects.filter(teacherName__icontains=user_search)
+
+        teacher_list = []
+        for t in teacher_by_id:
+            teacher_list.append(t)
+        for t in teacher_by_name:
+            teacher_list.append(t)
+
+        teacher_list.sort(key=cmp_teacher_by_id)
+
+        if len(teacher_list) > 0:
+            new_list = [teacher_list[0]]
+
+            for i in range(1, len(teacher_list)):
+                if teacher_list[i].teacherID != teacher_list[i - 1].teacherID:
+                    new_list.append(teacher_list[i])
+
+        return render(request, "searchTeacher.html", {'teacherData': new_list})

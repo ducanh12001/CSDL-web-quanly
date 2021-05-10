@@ -45,7 +45,7 @@
             {% csrf_token %}
             <div class="search-input">
                 Teacher
-                <input type="text" name="searchteacher" id="search3">
+                <input type="text" name="searchTeacher" id="search3">
             </div>
         </form>
 
@@ -63,15 +63,17 @@
             </thread>
 
             <tbody>
-                <tr>
-                    <td><a name="stt"></a></td>
-                    <td><a name="gvId"></a></td>
-                    <td><a name="teacher"></a></td>
-                    <td><a name="ngaysinhGV"></a></td>
-                    <td><a name="sdtGV"></a></td>
-                    <td><a name="email"></a></td>
-                    <td><a name="class"></a></td>
-                </tr>
+                {% for data in teacherData %}
+                    <tr>
+                        <td> {{forloop.counter}} </td>
+                        <td> {{data.teacherID}} </td>
+                        <td> {{data.teacherName}} </td>
+                        <td> {{data.teacherDOB}} </td>
+                        <td> {{data.phoneNumber}} </td>
+                        <td> {{data.teacherEmail}} </td>
+                        <td> {{"Chưa có dữ liệu"}} </td>
+                    </tr>
+                {% endfor %}
             </tbody>
         </table>
 

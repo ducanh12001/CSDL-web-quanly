@@ -40,19 +40,26 @@
         </div>
         <ul class="list-unstyled components">
             <li>
-                <a href="{% url 'home:management' %}">Class</a>
-            </li>
-            <li>
-                <a href="{% url 'home:add_student' %}">Add Student</a>
+                <a href="{% url 'home:manageClasses' %}">Class</a>
             </li>
         </ul>
     </nav>
     <div id="fixInfo">
         <div class="container">
             <div class="col-sm-5">
-                <select name="class" class="form-control" id="default" required="required">
-                    <option value="">Select Class</option>
-                </select>
+                <hr/>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <select name='courseSelected' class="form-control" id="default" required="required">
+                        <option selected>Select Class</option>
+
+                        {% for c in teacherAllCourses %}
+                            <option>{{c.courseID}}</option>
+                        {% endfor %}
+                    </select>
+
+                    <button type="submit">Xem</button>
+                </form>
             </div>
             <div class="but">
                 <button type="submid" class="savebut">Save</button>
@@ -64,25 +71,32 @@
                         <th>Mã HV</th>
                         <th>Họ và tên</th>
                         <th>Ngày sinh</th>
+                        <th>Giới tính</th>
                         <th>SĐT</th>
-                        <th>Số buổi vắng</th>
-                        <th>Điểm tổng kết</th>
+                        <th>Email</th>
                         <th>Ghi chú</th>
-                        <th>Action</th>
                     </tr>
                 </thread>
+
                 <tbody>
-                    <tr>
-                        <td><a name="stt"></a></td>
-                        <td><a name="hvId"></a></td>
-                        <td><a name="name"></a></td>
-                        <td><a name="ngaysinh"></a></td>
-                        <td><a name="sdt"></a></td>
-                        <td><a name="vang"></a></td>
-                        <td><a name="tongket"></a></td>
-                        <td><a name="note"></a></td>
-                        <td><a name="action"></a></td>
-                    </tr>
+                    {% for student in allStudents %}
+                        <tr>
+                            <td> {{forloop.counter}} </td>
+                            <td> {{student.studentID}} </td>
+                            <td> {{student.studentName}} </td>
+                            <td> {{student.DOB}} </td>
+                            <td> {{student.studentGender}}</td>
+                            <td> {{student.phoneNumber}} </td>
+                            <td> {{student.studentEmail}} </td>
+                            <td>
+                                {% if student.note is None %}
+                                    {{"Nothing"}}
+                                {% else %}
+                                    {{student.note}}
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>

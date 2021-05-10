@@ -7,6 +7,7 @@ class Teachers(models.Model):
 
     teacherID = models.CharField(max_length=10, primary_key=True, default=None)
     teacherName = models.CharField(max_length=200, null=True)
+    teacherDOB = models.DateField(null=True, default=None)
     teacherGender = models.CharField(max_length=6, null=True)
     phoneNumber = models.CharField(max_length=200, null=True)
     teacherEmail = models.CharField(max_length=200, null=True)
@@ -30,17 +31,21 @@ class CourseList(models.Model):
 
 
 class Students(models.Model):
-    studentID = models.CharField(max_length=20, primary_key=True)
+    studentID = models.CharField(max_length=20)
     studentName = models.CharField(max_length=50)
     studentEmail = models.CharField(max_length=100, null=True)
-    DOB = models.DateTimeField(default=None)
+    DOB = models.DateField(null=True, default=None)
     studentGender = models.CharField(max_length=6, null=True, default=None)
     phoneNumber = models.CharField(max_length=10, null=True, default=None)
-    studentEmail = models.EmailField(default=None)
     belongToCourse = models.ManyToManyField(CourseList)
+    note = models.TextField(null=True, default=None)
+
+    def __str__(self):
+        return self.studentName
 
 
 class StudentResult(models.Model):
+    resultID = models.CharField(max_length=200, primary_key=True)
     belongToStudent = models.ForeignKey(Students, null=True, on_delete=models.SET_NULL)
     absentDays = models.IntegerField(default=0)
     GPA = models.FloatField(default=0.0)
