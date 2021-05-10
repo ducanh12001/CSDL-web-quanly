@@ -237,10 +237,15 @@
 .search-input
 {
     margin-bottom: 30px;
+    font-weight: bold;
 }
 .search-input input
 {
     width: 30%;
+}
+.searching
+{
+    padding: 0.5px;
 }
 .search-input button
 {

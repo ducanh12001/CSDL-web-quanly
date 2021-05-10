@@ -99,6 +99,11 @@
     color: rgb(134, 134, 204);
     margin-bottom: 30px;
 }
+#fixInfo .xemb
+{
+    margin-top: 10px;
+    padding: 1.5px;
+}
 .table td, .table th
 {
     padding: 12px 15px;
@@ -124,10 +129,15 @@
     min-height: 100vh;
     transition: all 0.3s;
 }
-.sidebar
+#profile .sidebar
 {
     color: black;
     height: 250px;
     width: 250px;
     margin-left: 100px;
+    background-color: whitesmoke;
+}
+.col-md-9
+{
+    font-size: 18px;
 }
