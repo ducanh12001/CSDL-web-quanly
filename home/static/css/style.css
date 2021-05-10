@@ -80,7 +80,6 @@
 .about-content
 {
     padding-top: 20px;
-
 }
 
 /*review*/
@@ -91,7 +90,7 @@
     align-items: center;
     flex-direction: column;
     width: 100%;
-    background-color: whitesmoke;
+    background-color: #ddd;
 }
 #review h2::after
 {
@@ -229,14 +228,23 @@
     padding: 5px;
 }
 
-/*table*/
+/*search*/
+#search
+{
+    height: 549px;
+    background-color: rgb(198, 235, 224);
+}
 .search-input
 {
-    margin: 30px;
+    margin-bottom: 30px;
 }
 .search-input input
 {
     width: 30%;
+}
+.search-input button
+{
+    margin-left: 10px;
 }
 #search table
 {

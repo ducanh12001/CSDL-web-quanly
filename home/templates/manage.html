@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>ADMIN</title>
+    <title>Account</title>
     <link rel="stylesheet" type = "text/css" href="{% static 'css/fixInfo.css' %}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href= "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -36,9 +36,13 @@
 <div class="wrapper">
     <nav id="sidebar">
         <div class="sidebar-header">
-            <h4>ADMIN</h4>
+            <h4>Account</h4>
         </div>
         <ul class="list-unstyled components">
+            <!--new-->
+            <li>
+                <a href="profile.html">Profile</a>
+            </li>
             <li>
                 <a href="{% url 'home:manageClasses' %}">Class</a>
             </li>
