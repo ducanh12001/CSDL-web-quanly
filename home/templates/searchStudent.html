@@ -53,7 +53,6 @@
         <table class="table table-bordered">
             <thread>
                 <tr>
-                    <th scope="col">STT</th>
                     <th scope="col">Mã HV</th>
                     <th scope="col">Họ và tên</th>
                     <th scope="col">Ngày sinh</th>
@@ -61,47 +60,59 @@
                     <th scope="col">Lớp</th>
                     <th scope="col">Mã lớp</th>
                     <th scope="col">Giáo viên</th>
+                    <th scope="schedule">Lịch học</th>
                     <th scope="col">Phòng học</th>
-                    <th scope="col">Số buổi vắng</th>
-                    <th scope="col">Điểm tổng kết</th>
                     <th scope="col">Ghi chú</th>
                 </tr>
             </thread>
 
             <tbody>
-                <tr>
-                    <td scope="row"><a name="stt"></a></td>
-                    <td><a name="hvId"></a></td>
-                    <td><a name="name"></a></td>
-                    <td><a name="ngaysinh"></a></td>
-                    <td><a name="sdt"></a></td>
-                    <td><a name="class"></a></td>
-                    <td><a name="classId"></a></td>
-                    <td><a name="teacher"></a></td>
-                    <td><a name="vang"></a></td>
-                    <td><a name="tongket"></a></td>
-                    <td><a name="note"></a></td>
-                </tr>
-
-                {% for s in studentData %}
-                    <tr>
-                        <td scope="row"><a name="stt"></a></td>
-                        <td><a name="hvId">{{s.studentID}}</a></td>
-                        <td><a name="name">{{s.studentName}}</a></td>
-                        <td><a name="ngaysinh">{{s.DOB}}</a></td>
-                        <td><a name="sdt"></a>{{s.phoneNumber}}</td>
-                        <td><a name="class"></a>{{s.belongToCourse.courseName}}</td>
-                        <td><a name="classId"></a>{{s.belongToCourse.courseID}}</td>
-                        <td><a name="teacher"></a>{{s.belongToCourse.manageTeacher.teacherName}}</td>
-                        <td><a name="time"></a>{{s.belongToCourse.schedule}}</td>
-                        <td><a name="vang"></a>{{s.studentResult.absentDays}}</td>
-                        <td><a name="tongket">{{s.studentResult.GPA}}</a></td>
-                        <td><a name="note"></a>{{s.note}}</td>
-                    </tr>
+                {% for student in studentsData.object_list %}
+                    {% for key, value in student.items %}
+                        {% for joinedCourse in value %}
+                            <tr>
+                                <td> {{key.studentID}} </td>
+                                <td> {{key.studentName}} </td>
+                                <td> {{key.DOB}} </td>
+                                <td> {{key.phoneNumber}} </td>
+                                <td> {{joinedCourse.courseName}} </td>
+                                <td> {{joinedCourse.courseID}} </td>
+                                <td> {{joinedCourse.manageTeacher.teacherName}} </td>
+                                <td> {{joinedCourse.schedule}} </td>
+                                <td> {{joinedCourse.studyRoom}} </td>
+                                <td>
+                                    {% if key.note is None %}
+                                        {{"Nothing"}}
+                                    {% else %}
+                                        {{key.note}}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
                 {% endfor %}
+
+                {% if is_paginated %}
+                    {% if page_obj.has_previous %}
+                        <a class="btn btn-outline-info mb-4" href="?page=1">Back To First Page</a>
+                        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous Page</a>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                            <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                            <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Next Page</a>
+                        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Come To Last Page</a>
+                    {% endif %}
+                {% endif %}
             </tbody>
         </table>
-
     </div>
 </section>
 </body>

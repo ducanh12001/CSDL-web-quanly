@@ -5,7 +5,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.views import View
 from .models import Teachers, CourseList, Students, StudentResult
 from django.contrib import messages
-
+from django.core.paginator import Paginator, EmptyPage
+from django.views.generic.list import ListView
 
 def home_page(request):
     if request.user.is_authenticated:
@@ -88,42 +89,67 @@ class SearchClass(View):
         user_search = request.POST['searchClass']
         course_data_by_id = CourseList.objects.filter(courseID__icontains=user_search)
         course_data_by_name = CourseList.objects.filter(courseName__icontains=user_search)
-        data_list = []
 
-        for c in course_data_by_name:
-            data_list.append(c)
+        data_list = []
         for c in course_data_by_id:
             data_list.append(c)
-
-        data_list.sort(key=cmp_by_course_id)
+        for c in course_data_by_name:
+            data_list.append(c)
 
         if len(data_list) > 0:
+            data_list.sort(key=cmp_by_course_id)
             new_list = [data_list[0]]
-            pos = 1
 
             for i in range(1, len(data_list)):
                 if data_list[i].courseID != data_list[i - 1].courseID:
-                    pos = pos + 1
                     new_list.append(data_list[i])
-
-        print(new_list)
 
         return render(request, "searchClass.html", {'courseData': new_list})
 
 
-def cmp_by_student_id(element):
-    return element.studentID
+def cmp_by_student_name(element):
+    return element.studentName
 
 
 class SearchStudent(View):
     def get(self, request):
-        students_data = Students.objects.all().order_by("studentName")
-        return render(request, 'searchStudent.html', {'studentData': students_data})
+        all_students = Students.objects.all().order_by("studentName")
+
+        if len(all_students) > 0:
+            students_data = [{all_students[0]: all_students[0].belongToCourse.all()}]
+
+            for i in range(1, len(all_students)):
+                if all_students[i].studentID != all_students[i - 1].studentID:
+                    students_data.append({all_students[i]: all_students[i].belongToCourse.all()})
+
+        data_paginator = Paginator(students_data, 5)
+        page = data_paginator.get_page(1)
+
+        return render(request, 'searchStudent.html', {'studentsData': page})
 
     def post(self, request):
         user_search = request.POST['searchStudent']
         student_by_id = Students.objects.filter(studentID__icontains=user_search)
         student_by_name = Students.objects.filter(studentName__icontains=user_search)
+
+        all_students = []
+        for s in student_by_name:
+            all_students.append(s)
+        for s in student_by_id:
+            all_students.append(s)
+
+        if len(all_students) > 0:
+            all_students.sort(key=cmp_by_student_name)
+            students_data = [{all_students[0]: all_students[0].belongToCourse.all()}]
+
+            for i in range(1, len(all_students)):
+                if all_students[i].studentID != all_students[i - 1].studentID:
+                    students_data.append({all_students[i]: all_students[i].belongToCourse.all()})
+
+        data_paginator = Paginator(students_data, 5)
+        page = data_paginator.get_page(1)
+
+        return render(request, 'searchStudent.html', {'studentsData': page})
 
 
 def cmp_teacher_by_id(element):
@@ -141,14 +167,13 @@ class SearchTeacher(View):
         teacher_by_name = Teachers.objects.filter(teacherName__icontains=user_search)
 
         teacher_list = []
-        for t in teacher_by_id:
-            teacher_list.append(t)
         for t in teacher_by_name:
             teacher_list.append(t)
-
-        teacher_list.sort(key=cmp_teacher_by_id)
+        for t in teacher_by_id:
+            teacher_list.append(t)
 
         if len(teacher_list) > 0:
+            teacher_list.sort(key=cmp_teacher_by_id)
             new_list = [teacher_list[0]]
 
             for i in range(1, len(teacher_list)):
@@ -156,3 +181,20 @@ class SearchTeacher(View):
                     new_list.append(teacher_list[i])
 
         return render(request, "searchTeacher.html", {'teacherData': new_list})
+
+
+@login_required(login_url='login')
+def profile_page(request):
+    full_name = request.user.teachers.teacherName
+    email = request.user.teachers.teacherEmail
+    phone = request.user.teachers.phoneNumber
+    DOB = request.user.teachers.teacherDOB
+
+    context = {
+        'fullName': full_name,
+        'email': email,
+        'phoneNumber': phone,
+        'DOB': DOB
+    }
+
+    return render(request, 'profile.html', context)

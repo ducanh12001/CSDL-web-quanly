@@ -86,6 +86,16 @@
             </tbody>
         </table>
     </div>
+
+    <div>
+        {% if courseData.has_previous %}
+            <a href="{% url 'home:searchClass' %}?page={{courseData.previous_page_number}}">Previous Page</a>
+        {% endif %}
+
+        {% if courseData.has_next %}
+            <a href="{% url 'home:searchClass' %}?page={{courseData.next_page_number}}">Next Page</a>
+        {% endif %}
+    </div>
 </section>
 </body>
 </html>

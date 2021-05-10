@@ -13,4 +13,5 @@ urlpatterns = [
     path('management/classes', views.manage_classes, name='manageClasses'),
     path('management/classes/<string>:classID', views.manage_classes, name='manageClassesByID'),
     path('logout', views.logout_user, name='logout'),
+    path('profile/', views.profile_page, name='profile')
 ]
