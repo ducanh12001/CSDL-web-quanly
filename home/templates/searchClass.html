@@ -85,16 +85,42 @@
                 {% endfor %}
             </tbody>
         </table>
-    </div>
 
-    <div>
-        {% if courseData.has_previous %}
-            <a href="{% url 'home:searchClass' %}?page={{courseData.previous_page_number}}">Previous Page</a>
-        {% endif %}
+        <nav aria-label="Page navigation example">
+            <ul class="pagination pull-right">
+                {% if courseData.has_previous %}
+                    <li><a href="?page={{ courseData.previous_page_number }}">&laquo;</a></li>
+                {% else %}
+                    <li class="disabled"><span>&laquo;</span></li>
+                {% endif %}
 
-        {% if courseData.has_next %}
-            <a href="{% url 'home:searchClass' %}?page={{courseData.next_page_number}}">Next Page</a>
-        {% endif %}
+                {% if courseData.number > 3 %}
+                    <li><a href="?page=1"><i>1</i></a></li>
+                {% endif %}
+
+                {% for i in courseData.paginator.page_range %}
+                    {% if i > courseData.number|add:"-3" %}
+                        {% if i < courseData.number|add:"3" %}
+                            {% if courseData.number == i %}
+                                <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                            {% else %}
+                                <li><a href="?page={{ i }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+
+                {% if courseData.number < courseData.paginator.num_pages|add:"-3" %}
+                    <li><a href="?page={{ courseData.paginator.num_pages }}"><i>{{ courseData.paginator.num_pages }}</i></a></li>
+                {% endif %}
+
+                {% if courseData.has_next %}
+                    <li><a href="?page={{ courseData.next_page_number }}">&raquo;</a></li>
+                {% else %}
+                    <li class="disabled"><span>&raquo;</span></li>
+                {% endif %}
+            </ul>
+        </nav>
     </div>
 </section>
 </body>

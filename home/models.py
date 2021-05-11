@@ -38,7 +38,7 @@ class Students(models.Model):
     studentGender = models.CharField(max_length=6, null=True, default=None)
     phoneNumber = models.CharField(max_length=10, null=True, default=None)
     belongToCourse = models.ManyToManyField(CourseList)
-    note = models.TextField(null=True, default=None)
+    note = models.TextField(blank=True, null=True, default=None)
 
     def __str__(self):
         return self.studentName

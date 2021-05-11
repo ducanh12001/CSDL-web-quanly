@@ -100,6 +100,42 @@
                     {% endfor %}
                 </tbody>
             </table>
+
+            <nav aria-label="Page navigation example">
+                <ul class="pagination pull-right">
+                    {% if allStudents.has_previous %}
+                        <li><a href="?page={{ allStudents.previous_page_number }}">&laquo;</a></li>
+                    {% else %}
+                        <li class="disabled"><span>&laquo;</span></li>
+                    {% endif %}
+
+                    {% if allStudents.number > 3 %}
+                        <li><a href="?page=1"><i>1</i></a></li>
+                    {% endif %}
+
+                    {% for i in allStudents.paginator.page_range %}
+                        {% if i > allStudents.number|add:"-3" %}
+                            {% if i < allStudents.number|add:"3" %}
+                                {% if allStudents.number == i %}
+                                    <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                                {% else %}
+                                    <li><a href="?page={{ i }}">{{ i }}</a></li>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if allStudents.number < allStudents.paginator.num_pages|add:"-3" %}
+                        <li><a href="?page={{ allStudents.paginator.num_pages }}"><i>{{ allStudents.paginator.num_pages }}</i></a></li>
+                    {% endif %}
+
+                    {% if allStudents.has_next %}
+                        <li><a href="?page={{ allStudents.next_page_number }}">&raquo;</a></li>
+                    {% else %}
+                        <li class="disabled"><span>&raquo;</span></li>
+                    {% endif %}
+                </ul>
+            </nav>
         </div>
     </div>
 </div>

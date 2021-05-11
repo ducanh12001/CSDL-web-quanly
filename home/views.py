@@ -5,8 +5,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.views import View
 from .models import Teachers, CourseList, Students, StudentResult
 from django.contrib import messages
-from django.core.paginator import Paginator, EmptyPage
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic.list import ListView
+from array import *
+
 
 def home_page(request):
     if request.user.is_authenticated:
@@ -29,7 +31,7 @@ def search_page(request):
 
 @login_required(login_url='home:login')
 def manage_classes(request):
-    teacher_all_courses = request.user.teachers.courselist_set.all()
+    teacher_all_courses = request.user.teachers.courselist_set.all().order_by("courseID")
 
     if request.method == "POST":
         chosen_course_id = request.POST['courseSelected']
@@ -39,9 +41,18 @@ def manage_classes(request):
 
         chosen_course = CourseList.objects.get(courseID=chosen_course_id)
 
-        all_students = chosen_course.students_set.all().order_by("studentName")
+        all_students = chosen_course.students_set.all().order_by("-studentName")
 
-        return render(request, 'manage.html', {'teacherAllCourses': teacher_all_courses, 'allStudents': all_students})
+        data_paginator = Paginator(all_students, 10)
+        page = request.GET.get('page', 1)
+        try:
+            page_data = data_paginator.page(page)
+        except PageNotAnInteger:
+            page_data = data_paginator.page(1)
+        except EmptyPage:
+            page_data = data_paginator.page(data_paginator.num_pages)
+
+        return render(request, 'manage.html', {'teacherAllCourses': teacher_all_courses, 'allStudents': page_data})
     else:
         return render(request, 'manage.html', {'teacherAllCourses': teacher_all_courses})
 
@@ -83,7 +94,16 @@ class SearchClass(View):
             c.studentNumber = c.students_set.count()
             c.save()
 
-        return render(request, 'searchClass.html', {'courseData': course_data})
+        data_paginator = Paginator(course_data, 6)
+        page = request.GET.get('page', 1)
+        try:
+            page_data = data_paginator.page(page)
+        except PageNotAnInteger:
+            page_data = data_paginator.page(1)
+        except EmptyPage:
+            page_data = data_paginator.page(data_paginator.num_pages)
+
+        return render(request, 'searchClass.html', {'courseData': page_data})
 
     def post(self, request):
         user_search = request.POST['searchClass']
@@ -104,28 +124,43 @@ class SearchClass(View):
                 if data_list[i].courseID != data_list[i - 1].courseID:
                     new_list.append(data_list[i])
 
-        return render(request, "searchClass.html", {'courseData': new_list})
+        data_paginator = Paginator(new_list, 6)
+        page = request.GET.get('page', 1)
+        try:
+            page_data = data_paginator.page(page)
+        except PageNotAnInteger:
+            page_data = data_paginator.page(1)
+        except EmptyPage:
+            page_data = data_paginator.page(data_paginator.num_pages)
+
+        return render(request, 'searchClass.html', {'courseData': page_data})
 
 
-def cmp_by_student_name(element):
-    return element.studentName
+def cmp_by_student_id(element):
+    return element.studentID
 
 
 class SearchStudent(View):
     def get(self, request):
-        all_students = Students.objects.all().order_by("studentName")
+        all_students = Students.objects.all().order_by("-studentID")
+        last_data = []  # Cái này là cái danh sách cuối
 
         if len(all_students) > 0:
-            students_data = [{all_students[0]: all_students[0].belongToCourse.all()}]
+            for student in all_students:
+                courses = student.belongToCourse.all()
+                for course in courses:
+                    last_data.append({'student': student, 'course': course})
 
-            for i in range(1, len(all_students)):
-                if all_students[i].studentID != all_students[i - 1].studentID:
-                    students_data.append({all_students[i]: all_students[i].belongToCourse.all()})
+        data_paginator = Paginator(last_data, 6)
+        page = request.GET.get('page', 1)
+        try:
+            page_data = data_paginator.page(page)
+        except PageNotAnInteger:
+            page_data = data_paginator.page(1)
+        except EmptyPage:
+            page_data = data_paginator.page(data_paginator.num_pages)
 
-        data_paginator = Paginator(students_data, 5)
-        page = data_paginator.get_page(1)
-
-        return render(request, 'searchStudent.html', {'studentsData': page})
+        return render(request, 'searchStudent.html', {'studentsData': page_data})
 
     def post(self, request):
         user_search = request.POST['searchStudent']
@@ -138,18 +173,35 @@ class SearchStudent(View):
         for s in student_by_id:
             all_students.append(s)
 
+        # Lọc lại danh sách học sinh tìm được, chỉ ghi nhận các học sinh có ID khác nhau vào list students_data
+        students_data = []
         if len(all_students) > 0:
-            all_students.sort(key=cmp_by_student_name)
-            students_data = [{all_students[0]: all_students[0].belongToCourse.all()}]
+            all_students.sort(key=cmp_by_student_id)
 
-            for i in range(1, len(all_students)):
-                if all_students[i].studentID != all_students[i - 1].studentID:
-                    students_data.append({all_students[i]: all_students[i].belongToCourse.all()})
+            for i in range(0, len(all_students)):
+                if i == 0:
+                    students_data.append(all_students[i])
+                elif all_students[i].studentID != all_students[i - 1].studentID:
+                    students_data.append(all_students[i])
 
-        data_paginator = Paginator(students_data, 5)
-        page = data_paginator.get_page(1)
+        # Từ danh sách các học sinh khác nhau, tạo ra list tuple, mỗi tuple là tên học sinh + khóa học đang tham gia.
+        last_data = []
+        if len(students_data) > 0:
+            for student in students_data:
+                courses = student.belongToCourse.all()
+                for course in courses:
+                    last_data.append({'student': student, 'course': course})
 
-        return render(request, 'searchStudent.html', {'studentsData': page})
+        data_paginator = Paginator(last_data, 6)
+        page = request.GET.get('page', 1)
+        try:
+            page_data = data_paginator.page(page)
+        except PageNotAnInteger:
+            page_data = data_paginator.page(1)
+        except EmptyPage:
+            page_data = data_paginator.page(data_paginator.num_pages)
+
+        return render(request, 'searchStudent.html', {'studentsData': page_data})
 
 
 def cmp_teacher_by_id(element):
@@ -159,7 +211,17 @@ def cmp_teacher_by_id(element):
 class SearchTeacher(View):
     def get(self, request):
         teacher_data = Teachers.objects.all().order_by("teacherName")
-        return render(request, 'searchTeacher.html', {'teacherData': teacher_data})
+
+        data_paginator = Paginator(teacher_data, 6)
+        page = request.GET.get('page', 1)
+        try:
+            page_data = data_paginator.page(page)
+        except PageNotAnInteger:
+            page_data = data_paginator.page(1)
+        except EmptyPage:
+            page_data = data_paginator.page(data_paginator.num_pages)
+
+        return render(request, 'searchTeacher.html', {'teacherData': page_data})
 
     def post(self, request):
         user_search = request.POST['searchTeacher']
@@ -180,7 +242,16 @@ class SearchTeacher(View):
                 if teacher_list[i].teacherID != teacher_list[i - 1].teacherID:
                     new_list.append(teacher_list[i])
 
-        return render(request, "searchTeacher.html", {'teacherData': new_list})
+        data_paginator = Paginator(new_list, 6)
+        page = request.GET.get('page', 1)
+        try:
+            page_data = data_paginator.page(page)
+        except PageNotAnInteger:
+            page_data = data_paginator.page(1)
+        except EmptyPage:
+            page_data = data_paginator.page(data_paginator.num_pages)
+
+        return render(request, "searchTeacher.html", {'teacherData': page_data})
 
 
 @login_required(login_url='login')

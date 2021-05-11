@@ -78,6 +78,41 @@
             </tbody>
         </table>
 
+        <nav aria-label="Page navigation example">
+            <ul class="pagination pull-right">
+                {% if teacherData.has_previous %}
+                    <li><a href="?page={{ studentsData.previous_page_number }}">&laquo;</a></li>
+                {% else %}
+                    <li class="disabled"><span>&laquo;</span></li>
+                {% endif %}
+
+                {% if teacherData.number > 3 %}
+                    <li><a href="?page=1"><i>1</i></a></li>
+                {% endif %}
+
+                {% for i in teacherData.paginator.page_range %}
+                    {% if i > teacherData.number|add:"-3" %}
+                        {% if i < teacherData.number|add:"3" %}
+                            {% if teacherData.number == i %}
+                                <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                            {% else %}
+                                <li><a href="?page={{ i }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+
+                {% if teacherData.number < teacherData.paginator.num_pages|add:"-3" %}
+                    <li><a href="?page={{ studentsData.paginator.num_pages }}"><i>{{ teacherData.paginator.num_pages }}</i></a></li>
+                {% endif %}
+
+                {% if teacherData.has_next %}
+                    <li><a href="?page={{ studentsData.next_page_number }}">&raquo;</a></li>
+                {% else %}
+                    <li class="disabled"><span>&raquo;</span></li>
+                {% endif %}
+            </ul>
+        </nav>
     </div>
 </section>
 </body>

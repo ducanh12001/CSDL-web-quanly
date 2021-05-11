@@ -67,52 +67,64 @@
             </thread>
 
             <tbody>
-                {% for student in studentsData.object_list %}
-                    {% for key, value in student.items %}
-                        {% for joinedCourse in value %}
-                            <tr>
-                                <td> {{key.studentID}} </td>
-                                <td> {{key.studentName}} </td>
-                                <td> {{key.DOB}} </td>
-                                <td> {{key.phoneNumber}} </td>
-                                <td> {{joinedCourse.courseName}} </td>
-                                <td> {{joinedCourse.courseID}} </td>
-                                <td> {{joinedCourse.manageTeacher.teacherName}} </td>
-                                <td> {{joinedCourse.schedule}} </td>
-                                <td> {{joinedCourse.studyRoom}} </td>
-                                <td>
-                                    {% if key.note is None %}
-                                        {{"Nothing"}}
-                                    {% else %}
-                                        {{key.note}}
-                                    {% endif %}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    {% endfor %}
+                {% for row in studentsData %}
+                    <tr>
+                        <td> {{row.student.studentID}} </td>
+                        <td> {{row.student.studentName}} </td>
+                        <td> {{row.student.DOB}} </td>
+                        <td> {{row.student.phoneNumber}} </td>
+                        <td> {{row.course.courseName}} </td>
+                        <td> {{row.course.courseID}} </td>
+                        <td> {{row.course.manageTeacher.teacherName}} </td>
+                        <td> {{row.course.schedule}} </td>
+                        <td> {{row.course.studyRoom}} </td>
+                        <td>
+                            {% if row.student.note is None %}
+                                {{"Nothing"}}
+                            {% else %}
+                                {{row.student.note}}
+                            {% endif %}
+                        </td>
+                    </tr>
                 {% endfor %}
-
-                {% if is_paginated %}
-                    {% if page_obj.has_previous %}
-                        <a class="btn btn-outline-info mb-4" href="?page=1">Back To First Page</a>
-                        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Previous Page</a>
-                    {% endif %}
-
-                    {% for num in page_obj.paginator.page_range %}
-                        {% if page_obj.number == num %}
-                            <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
-                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                            <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
-                        {% endif %}
-                    {% endfor %}
-
-                    {% if page_obj.has_next %}
-                        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.previous_page_number }}">Next Page</a>
-                        <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}">Come To Last Page</a>
-                    {% endif %}
-                {% endif %}
             </tbody>
         </table>
+
+        <nav aria-label="Page navigation example">
+            <ul class="pagination pull-right">
+                {% if studentsData.has_previous %}
+                    <li><a href="?page={{ studentsData.previous_page_number }}">&laquo;</a></li>
+                {% else %}
+                    <li class="disabled"><span>&laquo;</span></li>
+                {% endif %}
+
+                {% if studentsData.number > 3 %}
+                    <li><a href="?page=1"><i>1</i></a></li>
+                {% endif %}
+
+                {% for i in studentsData.paginator.page_range %}
+                    {% if i > studentsData.number|add:"-3" %}
+                        {% if i < studentsData.number|add:"3" %}
+                            {% if studentsData.number == i %}
+                                <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                            {% else %}
+                                <li><a href="?page={{ i }}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+
+                {% if studentsData.number < studentsData.paginator.num_pages|add:"-3" %}
+                    <li><a href="?page={{ studentsData.paginator.num_pages }}"><i>{{ studentsData.paginator.num_pages }}</i></a></li>
+                {% endif %}
+
+                {% if studentsData.has_next %}
+                    <li><a href="?page={{ studentsData.next_page_number }}">&raquo;</a></li>
+                {% else %}
+                    <li class="disabled"><span>&raquo;</span></li>
+                {% endif %}
+            </ul>
+        </nav>
     </div>
 </section>
 </body>
