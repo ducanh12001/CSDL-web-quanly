@@ -173,7 +173,7 @@
 <h2>Come to us</h2>
 <div class="row">
   <div class="col-md-6">
-      <form class="contact-form" method="POST">
+      <form action="https://formspree.io/f/mwkalkwp" method="POST" id="my-form" class="contact-form">
           {% csrf_token %}
         <div class="form-group">
         <input name="ctName" type="text" class="form-control" placeholder="Your Name">
@@ -189,6 +189,7 @@
         </div>
         <button type="submit" class="btn btn-primary">SEND</button>
       </form>
+      <div id="status"></div>
   </div>
   <div class="col-md-6 contact-info">
       <div class="follow"><b>Address:</b><i class="fa fa-map-marker"></i>ABC Road</div>
@@ -201,6 +202,28 @@
 </div>
 </div>
 </section>
+<script>
+  var form = document.getElementById("my-form");
+  
+  async function handleSubmit(event) {
+    event.preventDefault();
+    var status = document.getElementById("statuss");
+    var data = new FormData(event.target);
+    fetch(event.target.action, {
+      method: form.method,
+      body: data,
+      headers: {
+          'Accept': 'application/json'
+      }
+    }).then(response => {
+      status.innerHTML = "Success!";
+      form.reset()
+    }).catch(error => {
+      status.innerHTML = "Oops! There was a problem."
+    });
+  }
+  form.addEventListener("submit", handleSubmit)
+</script>
 <!--footer-->
 <section id="footer">
 <div class="container">
