@@ -1,0 +1,143 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+#nav-bar
+{
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+#nav-bar nav.bg-dark
+{
+    background-color: white!important;
+}
+.navbar-brand img
+{
+    height: 50px;
+    padding-left: 20px;
+}
+.navbar-nav li
+{
+    padding: 0 10px;
+}
+.navbar-nav li a
+{
+    float: right;
+    text-align: left;
+}
+#nav-bar ul li a:hover
+{
+    color: #007bff!important
+}
+.navbar
+{
+    background: #fff;
+}
+.navbar-toggler
+{
+    border: none!important;
+}
+.nav-link
+{
+    color: #555!important;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+/*leftbar*/
+.wrapper {
+    display: flex;
+    width: 100%;
+    align-items: stretch;
+}
+#sidebar {
+    min-width: 250px;
+    max-width: 250px;
+    min-height: 100vh;
+    background: #5c5c5f;
+    color: #fff;
+    transition: all 0.3s;
+}
+#sidebar .sidebar-header {
+    padding: 20px;
+    background: #5c5c5f;
+}
+#sidebar ul.components {
+    padding: 10px 0;
+}
+#sidebar ul li a {
+    padding: 10px;
+    font-size: 1.1em;
+    display: block;
+    color: white;
+}
+#sidebar ul li a:hover {
+    background: rgb(46, 44, 44);
+    text-decoration: none;
+}
+/*fixpage*/
+#fixInfo 
+{
+    width: 100%;
+    padding: 20px;
+    min-height: 100vh;
+    transition: all 0.3s;
+    background-color: rgb(207, 233, 233);
+}
+#fixInfo table
+{
+    border-collapse: collapse;
+    width: 100%;
+    text-align: center;
+    margin-top: 0.5cm;
+}
+#fixInfo h1
+{
+    text-align: center;
+    font-size: 30px;
+    color: rgb(134, 134, 204);
+    margin-bottom: 30px;
+}
+#fixInfo .xemb
+{
+    margin-top: 10px;
+    padding: 1.5px;
+}
+.table td, .table th
+{
+    padding: 12px 15px;
+    border: 1.5px solid #ddd;
+    text-align: center; 
+    font-size: 14px;
+}
+.table th
+{
+    background-color: rgb(60, 96, 194);
+    color: white;
+}
+.table tbody tr
+{
+    background-color: #f5f5f5;
+}
+/*profile*/
+#profile
+{
+    background-color: rgb(213, 222, 224);
+    width: 100%;
+    padding: 20px;
+    min-height: 100vh;
+    transition: all 0.3s;
+}
+#profile .sidebar
+{
+    color: black;
+    height: 240px;
+    width: 240px;
+    margin-left: 100px;
+    background-color: whitesmoke;
+}
+.col-md-9
+{
+    font-size: 18px;
+}
