@@ -1,1 +1,1 @@
-web: gunicorn CSDL_EnglishCenterWeb.wsgi —log-file -
+web: waitress-serve --port=$PORT CSDL_EnglishCenterWeb.wsgi:application
